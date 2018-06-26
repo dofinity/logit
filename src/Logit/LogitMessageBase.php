@@ -5,7 +5,7 @@ namespace Logit;
 use Logit\Rest\HttpClient;
 
 /**
- * Class LogitMessageBase
+ * Class LogitMessage
  *
  * @package Logit
  */
@@ -27,7 +27,7 @@ abstract class LogitMessageBase extends LogitBase implements LogitMessageInterfa
     $this->extra_headers = [];
   }
 
-  public function sendLogMessage() {
+  public function send() {
     return $this->client->MakeLogitApiCall(
       $this->endpoint['uri'],
       $this->endpoint['method'],
@@ -40,15 +40,23 @@ abstract class LogitMessageBase extends LogitBase implements LogitMessageInterfa
   /**
    * {@inheritdoc}
    */
-  public function setLogContent($content) {
-    $this->payload = $content;
+  public function setBody($body) {
+    $this->getMessage()->body = $body;
     return $this;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setLogType($type) {
+  public function setCreated($timestamp) {
+    $this->getMessage()->created = $timestamp;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setType($type) {
     $this->extra_headers[] = ['LogType' => $type];
     return $this;
   }
@@ -56,8 +64,29 @@ abstract class LogitMessageBase extends LogitBase implements LogitMessageInterfa
   /**
    * {@inheritdoc}
    */
+  public function setSource($source) {
+    $this->getMessage()->source = $source;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setTarget($target) {
+    $this->getMessage()->target = $target;
+    return $this;
+  }
+
+  /**
+   * @return \JsonSerializable
+   */
+  abstract protected function getMessage();
+
+  /**
+   * {@inheritdoc}
+   */
   public function jsonSerialize() {
-    return $this->getCampaign()->jsonSerialize();
+    return $this->getMessage()->jsonSerialize();
   }
 
 }

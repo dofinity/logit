@@ -1,11 +1,11 @@
 <?php
 
-namespace ActiveTrail;
+namespace Logit;
 
 /**
  * Class JsonSerializableStruct
  *
- * @package ActiveTrail
+ * @package Logit
  */
 abstract class JsonSerializableStruct implements \JsonSerializable {
 
