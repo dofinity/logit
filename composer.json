@@ -1,0 +1,23 @@
+{
+    "name": "dofinity/logit",
+    "type": "library",
+    "description": "PHP Library for integrating with logit.io",
+    "keywords": ["PHP", "Logging", "ELK"],
+    "homepage": "http://dofinity.com/modules/logit",
+    "license": "GPL2",
+    "require": {
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "authors": [
+        {
+            "name": "Peleg Rabinowitz",
+            "email": "peleg@dofinity.com",
+            "homepage": "https://github.com/dofinity"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Logit\\": "src/Logit"
+        }
+    }
+}
