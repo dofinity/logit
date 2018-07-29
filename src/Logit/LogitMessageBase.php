@@ -78,6 +78,30 @@ abstract class LogitMessageBase extends LogitBase implements LogitMessageInterfa
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function setCode($code) {
+    $this->getMessage()->code = $code;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setErrorMessage($errorMessage) {
+    $this->getMessage()->errorMessage = $errorMessage;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setContext($context) {
+    $this->getMessage()->context = $context;
+    return $this;
+  }
+
+  /**
    * @return \JsonSerializable
    */
   abstract protected function getMessage();

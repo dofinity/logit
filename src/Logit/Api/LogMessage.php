@@ -30,9 +30,19 @@ class LogMessage extends JsonSerializableStruct {
   public $body;
 
   /**
-   * @var string;
+   * @var integer;
    */
   public $code;
+
+  /**
+   * @var string;
+   */
+  public $errorMessage;
+
+  /**
+   * @var string;
+   */
+  public $context;
 
 }
 
