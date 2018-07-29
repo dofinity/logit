@@ -27,11 +27,14 @@ abstract class LogitMessageBase extends LogitBase implements LogitMessageInterfa
     $this->extra_headers = [];
   }
 
+  /*
+   * @todo Add endpoint and method parameters here...
+   */
   public function send() {
     return $this->client->MakeLogitApiCall(
-      $this->endpoint['uri'],
-      $this->endpoint['method'],
-      $this,
+      null,
+      null,
+      $this->getMessage(),
       null,
       $this->extra_headers
     );
@@ -56,8 +59,20 @@ abstract class LogitMessageBase extends LogitBase implements LogitMessageInterfa
   /**
    * {@inheritdoc}
    */
+  public function setCreatedWithMicroseconds() {
+    $dt = new \DateTime();
+    $time = microtime(true);
+    $micro_time = sprintf("%03d",($time - floor($time)) * 1000);
+    $dt->setTimestamp(microtime(true));
+    $this->getMessage()->created = $dt->format('F jS Y, h:i:s.' . $micro_time);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function setType($type) {
-    $this->extra_headers[] = ['LogType' => $type];
+    $this->extra_headers['LogType'] = $type;
     return $this;
   }
 
