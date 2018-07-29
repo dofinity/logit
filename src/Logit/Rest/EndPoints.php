@@ -10,6 +10,6 @@ namespace Logit\Rest;
 abstract class EndPoints {
 
   // Base URI
-  public static $API_BASE = ['method' => 'post', 'uri' => 'https://api.logit.io/v2/'];
+  public static $API_BASE = ['method' => 'post', 'uri' => 'https://api.logit.io/v2'];
 
 }

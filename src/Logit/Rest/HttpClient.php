@@ -32,12 +32,14 @@ class HttpClient {
    * @return \GuzzleHttp\Psr7\Response
    * @throws \Exception
    */
-  public function MakeLogitApiCall($endpoint, $method, $payload = null, $endpoint_params = null, $extra_headers = []){
+  public function MakeLogitApiCall($endpoint = null, $method = null, $payload = null, $endpoint_params = null, $extra_headers = []){
 
     // First, make sure we have an authorization token
     if (empty($this->apiKey)) {
       throw new NoApiKeyException('You must provide an Api Token.');
     }
+
+    //watchdog('DEBUG', json_encode($payload));
 
     // Process any endpoint params
     if (!empty($endpoint_params)) {
@@ -66,6 +68,10 @@ class HttpClient {
     if (!empty($payload)) {
       $request_options['json'] = $payload;
     }
+
+    // Set method and endpoint uri
+    $endpoint = empty($endpoint) ? EndPoints::$API_BASE['uri'] : $endpoint;
+    $method = empty($method) ? EndPoints::$API_BASE['method'] : $method;
 
     return $client->request($method, $endpoint, $request_options);
 

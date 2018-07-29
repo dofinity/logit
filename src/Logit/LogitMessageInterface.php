@@ -39,4 +39,16 @@ interface LogitMessageInterface {
    */
   public function setCreated($created);
 
+  /**
+   * @param mixed $code
+   * @return static
+   */
+  public function setCode($code);
+
+  /**
+   * @param mixed $errorMessage
+   * @return static
+   */
+  public function setErrorMessage($errorMessage);
+
 }

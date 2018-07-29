@@ -9,7 +9,7 @@ use Logit\Api\LogMessage;
  *
  * @package Logit
  */
-class LogitMessage extends LogitMessageBase implements LogitMessageInterface {
+class LogitMessage extends LogitMessageBase {
 
   protected $messagePayload;
 
