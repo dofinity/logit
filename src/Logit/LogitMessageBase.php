@@ -95,6 +95,14 @@ abstract class LogitMessageBase extends LogitBase implements LogitMessageInterfa
   /**
    * {@inheritdoc}
    */
+  public function setAction($action) {
+    $this->getMessage()->action = $action;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function setCode($code) {
     $this->getMessage()->code = $code;
     return $this;

@@ -22,16 +22,22 @@ interface LogitMessageInterface {
   public function setBody($body);
 
   /**
-   * @param mixed $content
+   * @param mixed $source
    * @return static
    */
-  public function setSource($content);
+  public function setSource($source);
 
   /**
-   * @param mixed $content
+   * @param mixed $target
    * @return static
    */
-  public function setTarget($content);
+  public function setTarget($target);
+
+  /**
+   * @param mixed $action
+   * @return static
+   */
+  public function setAction($action);
 
   /**
    * @param mixed $created

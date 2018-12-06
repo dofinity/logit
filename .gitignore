@@ -1,0 +1,9 @@
+# Ignore binaries.
+/bin
+
+# Ignore Composer-managed dependencies.
+/vendor
+
+# IDEs
+.idea
+nbproject
