@@ -1,38 +1,44 @@
 <?php
 
 namespace Logit\Rest;
+
 use Logit\Exception\NoApiKeyException;
 use GuzzleHttp\Client;
 
 /**
  * Class HttpClient
+ *
  * @package ActiveTrail\Rest
  */
 class HttpClient {
 
   const CONNECTION_TIMEOUT = 5;
+
   const REQUEST_TIMEOUT = 10;
+
   private $apiKey;
 
   /**
    * HttpClient constructor.
+   *
    * @param $apiToken
    */
   public function __construct($apiKey) {
     $this->apiKey = $apiKey;
   }
 
-
   /**
    * General method for making API calls to ActiveTrail via GuzzleHttp.
+   *
    * @param $endpoint
    * @param $method
    * @param $payload
    * @param null $endpoint_params
+   *
    * @return \GuzzleHttp\Psr7\Response
    * @throws \Exception
    */
-  public function MakeLogitApiCall($endpoint = null, $method = null, $payload = null, $endpoint_params = null, $extra_headers = []){
+  public function MakeLogitApiCall($endpoint = NULL, $method = NULL, $payload = NULL, $endpoint_params = NULL, $extra_headers = []) {
 
     // First, make sure we have an authorization token
     if (empty($this->apiKey)) {
@@ -48,12 +54,12 @@ class HttpClient {
       }
     }
 
-    $client = new Client([ 'base_uri' => EndPoints::$API_BASE['uri'] ]);
+    $client = new Client(['base_uri' => EndPoints::$API_BASE['uri']]);
 
     $request_options = [
       'connect_timeout' => self::CONNECTION_TIMEOUT,
       'timeout' => self::REQUEST_TIMEOUT,
-      'headers' => []
+      'headers' => [],
     ];
 
     // Add additional headers if any were passed.
@@ -78,4 +84,3 @@ class HttpClient {
   }
 
 }
-
