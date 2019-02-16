@@ -4,6 +4,9 @@ namespace Logit\Rest;
 
 use Logit\Exception\NoApiKeyException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 
 /**
  * Class HttpClient
@@ -16,7 +19,12 @@ class HttpClient {
 
   const REQUEST_TIMEOUT = 10;
 
+  const RETRY_LIMIT = 5;
+
+  const BACKOFF_EXPONENT = 2;
+
   private $apiKey;
+  private $retryCounter;
 
   /**
    * HttpClient constructor.
@@ -45,7 +53,8 @@ class HttpClient {
       throw new NoApiKeyException('You must provide an Api Token.');
     }
 
-    //watchdog('DEBUG', json_encode($payload));
+    $handlerStack = HandlerStack::create(new CurlHandler());
+    $handlerStack->push(Middleware::retry($this->retryDecider(), $this->retryDelay()));
 
     // Process any endpoint params
     if (!empty($endpoint_params)) {
@@ -54,7 +63,7 @@ class HttpClient {
       }
     }
 
-    $client = new Client(['base_uri' => EndPoints::$API_BASE['uri']]);
+    $client = new Client(['base_uri' => EndPoints::$API_BASE['uri'], 'handler' => $handlerStack]);
 
     $request_options = [
       'connect_timeout' => self::CONNECTION_TIMEOUT,
@@ -81,6 +90,50 @@ class HttpClient {
 
     return $client->request($method, $endpoint, $request_options);
 
+  }
+
+  /**
+   * Decides whether to perform a retry
+   *
+   * @return \Closure
+   */
+  public function retryDecider() {
+    return function (
+      $retries,
+      Request $request,
+      Response $response = NULL,
+      RequestException $exception = NULL
+    ) {
+      // Limit the number of retries to 5
+      if ($retries >= self::RETRY_LIMIT) {
+        return FALSE;
+      }
+
+      // Retry connection exceptions
+      if ($exception instanceof ConnectException) {
+        return TRUE;
+      }
+
+      if ($response) {
+        // Retry on server errors
+        if ($response->getStatusCode() >= 500) {
+          return TRUE;
+        }
+      }
+
+      return FALSE;
+    };
+  }
+
+  /**
+   * delay 2s 4s 8s 16s 32s
+   *
+   * @return Closure
+   */
+  public function retryDelay() {
+    return function ($retryCount) {
+      return (pow(self::BACKOFF_EXPONENT, $retryCount) * 1000);
+    };
   }
 
 }
